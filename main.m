@@ -1,8 +1,22 @@
+clc
+close all
+clear
 
-%Läs in bilder
+% Read image
+image = imread('Images_Training\jaaaasmin.png');
+% image = imread('Images_Training\im5s.jpg');
+
+BW = makeImageBinary(image);
+[H, theta, rho, P] = houghFunction(BW, image);
+
+% Calculate the angle for which the image is originally rotated by
+rotatedImage = rotateImage(image, P, theta);
+figure
+imshow(rotatedImage)
+
+
 
 %Identifiera linjer
-
 %Rotera bilder
 
 %Gör bilden binary med thresholding
