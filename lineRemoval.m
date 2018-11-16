@@ -5,6 +5,7 @@ function outputIM = lineRemoval(binaryIM)
 % Ib = imageB < level * 255;
 
 % alternativ som inte är lika bra
+%men kanske funkar
 % SE = strel('arbitrary', eye(3));
 % openIM = imopen(binaryIM, SE);
 
