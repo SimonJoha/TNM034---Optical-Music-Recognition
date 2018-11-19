@@ -6,9 +6,9 @@ function outputIM = lineRemoval(binaryIM)
 
 % alternativ som inte är lika bra
 %men kanske funkar
-% SE = strel('arbitrary', eye(3));
-% openIM = imopen(binaryIM, SE);
+SE = strel('rectangle', [3, 1]);
+open = imopen(binaryIM, SE);
 
-outputIM = bwmorph(binaryIM, 'open');
+outputIM = open;
 end
 
