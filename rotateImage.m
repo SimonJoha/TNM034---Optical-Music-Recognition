@@ -4,9 +4,9 @@ function rotatedImage = rotateImage(image, peaks, theta)
     possibleAngle = theta(possibleAngle(2));
     
     if (possibleAngle < 0)
-        rotatedImage = imrotate(image, 90-abs(possibleAngle));
+        rotatedImage = imrotate(image, 90-abs(possibleAngle), 'bicubic');
     else 
-        rotatedImage = imrotate(image, abs(possibleAngle)-90);
+        rotatedImage = imrotate(image, abs(possibleAngle)-90, 'bicubic');
     end 
 end
 

@@ -1,8 +1,8 @@
-function [H, theta, rho, P] = houghFunction( BW, image )
+function [H, theta, rho, P, lines] = houghFunction( BW, image )
 
     % Hough transform, with theta going from -90 to 89 with an
     % interval of x
-    [H, theta, rho] = hough(BW, 'Theta', -90:0.05:89);
+    [H, theta, rho] = hough(BW, 'Theta', -90:0.02:89);
     
     % Normalize to get the hough tranform matrix in grayscale and then show the
     % image
