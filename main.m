@@ -29,6 +29,9 @@ for i = 1:order-2
     sortedLinePos = sort(linPos(:,i));
 end
 
+%NÄSTA GÅNG SIMON OCH JASMINE 
+%SKA NI HITTA POSITIONERNA PÅ NOTERNA
+
 
 %Identifiera linjer
 %Rotera bilder
