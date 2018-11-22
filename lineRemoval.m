@@ -4,10 +4,12 @@ function outputIM = lineRemoval(binaryIM)
 % level = graythresh(imageB);
 % Ib = imageB < level * 255;
 
-% alternativ som inte är lika bra
-%men kanske funkar
+% Tar bort stafflines
 SE = strel('rectangle', [3, 1]);
 open = imopen(binaryIM, SE);
+
+% tar bort stafflines OCH notlinjer
+% open = bwmorph(Ib, 'open');
 
 outputIM = open;
 end
