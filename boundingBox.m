@@ -1,5 +1,6 @@
 function [bbox] = boundingBox(nolines)
- 
+
+%oh boy nu lär jag mig git bash
 
 st = regionprops(nolines, 'BoundingBox');
     for k = 1 : length(st)
