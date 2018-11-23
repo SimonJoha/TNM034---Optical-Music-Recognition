@@ -27,6 +27,12 @@ for i = 1:order-2
     [A, ind] = maxk(subPks, 5);
     linPos(:,i) = subLocs(ind);
     sortedLinePos = sort(linPos(:,i));
+    subIMG = lineRemoval(subImg);
+    figure
+    imshow(subIMG);
+    box = boundingBox(subIMG);
+    
+    
 end
 
 %NÄSTA GÅNG SIMON OCH JASMINE 
