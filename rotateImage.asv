@@ -17,14 +17,11 @@ function rotatedImage = rotateImage(image, peaks, theta, lines)
         rotAngle = 90 - abs(possibleAngle);
     end 
     
-%     rotatedIma = zeros(size(image))
-    rotatedIma = imrotate(image, rotAngle, 'bicubic');
-    [heightRot, lengthRot, depthRot] = size(rotatedIma)
-    cropLength = ceil(abs(tand(rotAngle) * lengthRot));
-    cropLength
-    heightRot
-    rotatedImage = rotatedIma((cropLength:(heightRot - cropLength)),:, :);
     
+    rotatedIma = imrotate(image, rotAngle, 'bicubic');
+    [heightRot, lengthRot] = size(rotatedIma);
+    cropLength = tan(abs(possibleAngle) - 90) * lengthRot;
+    rotatedImage = rotatedIma(cropLength:heightRot
     
 end
 

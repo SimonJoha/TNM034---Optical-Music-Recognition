@@ -20,7 +20,7 @@ function [H, theta, rho, P, lines] = houghFunction( BW, image )
     
     
     % Get x amount of peaks
-    P  = houghpeaks(H, 15);
+    P  = houghpeaks(H, 40);
     
     % Now things are weird, I have no clue what this does. But it might work
     x = theta(P(:,2));

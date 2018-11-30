@@ -10,7 +10,7 @@ BW = makeImageBinary(image);
 [H, theta, rho, P, lines] = houghFunction(BW, image);
 
 % Calculate the angle for which the image is originally rotated by
-rotatedImage = rotateImage(image, P, theta, lines);
+rotatedImage = rotateImage(image, P, theta);
 figure
 imshow(rotatedImage)
 
@@ -33,8 +33,20 @@ for i = 1:order-2
     [subIMG2, centroids] = findCentroids(removeG{i});
     [notePos, noteChar] = lineToNotes(sortedLinePos(:,i));
 
-    notes = identifyNotes(centroids, notePos, noteChar, notes)
+    nidentifyNotes(centroids, notePos, noteChar, notes)
+    for k = 1:length(centroids)
     
-end
+        tempNote = [notePos(1), centroids(k,2) - notePos(1), 1];
 
-notes
+        for j = 1:length(notePos)
+            diff = centroids(k,2) - notePos(j);
+            if abs(diff) < tempNote(2)
+                tempNote = [notePos(j), diff, j];
+
+            end
+        end
+        notes = [notes, noteChar(tempNote(3))];  
+    end
+    
+    notes
+end

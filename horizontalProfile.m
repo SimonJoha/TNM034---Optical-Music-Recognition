@@ -2,8 +2,11 @@ function [horizontalProjection, begin, order] = horizontalProfile(BW)
 %horizontalProjection Summary of this function goes here
 %   Detailed explanation goes here
     horizontalProjection = sum(BW, 2);
-    maxy = max(horizontalProjection);
-    miny = min(horizontalProjection);
+    maxy = max(horizontalProjection)
+    miny = min(horizontalProjection)
+
+    [rows, columns] = size(BW);
+    plot(horizontalProjection, 1:rows, 'b-');
 
     small = 1;
     order = 1;
