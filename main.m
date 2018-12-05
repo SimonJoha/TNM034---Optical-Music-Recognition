@@ -4,23 +4,20 @@ clear
 
 % Read image
 %image = imread('Images_Training\jaaaasmin.png');
-image = imread('Images_Training\im3s.jpg');
+image = imread('Images_Training\im10s.jpg');
 
-BW = makeImageBinary(image);
+% BW = makeImageBinary(image);
 %[H, theta, rho, P, lines] = houghFunction(BW);
 
 % Calculate the angle for which the image is originally rotated by
 %rotatedImage = rotateImage(image, P, theta, lines);
 rotatedImage = newRotate(image);
 figure
-imshow(rotatedImage)
-
-
+imshow(rotatedImage);
 
 BW = makeImageBinary(rotatedImage);
 figure
 imshow(BW)
-
 
 %%
 [horizontalProjection, begin, order] = horizontalProfile(BW);
@@ -42,3 +39,9 @@ for i = 1:length(begin) - 1
     
 end
 
+%% 
+% Frågor:
+
+% Hur ska vi kunna identifiera fjärde- och åttondels noter?
+% Hur blir vi av med alla smågrejer som inte försvinner i opening morphological operation? Typ balkarna som räknas
+% som centroids?????

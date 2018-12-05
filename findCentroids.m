@@ -1,10 +1,13 @@
 function [subIMG, centroids] = findCentroids(image)
-%UNTITLED Summary of this function goes here
-%   Detailed explanation goes here
+    % Find all the centroid-objects in the image, in this case note heads,
+    % and return its positions. 
+    
+    % Use a disk object to perform the opening morphological operation
     SE = strel('disk', 4);
     image = logical(image);
     subIMG = imopen(image, SE);
 
+%     % Plot the notes
     s = regionprops('table', subIMG, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
     centroids = cat(1, s.Centroid);
     figure

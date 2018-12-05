@@ -1,17 +1,17 @@
 function outputIM = lineRemoval(binaryIM)
-    % make binary om det behövs
-    % imageB = rgb2gray(image);
-    % level = graythresh(imageB);
-    % Ib = imageB < level * 255;
+    % Function remove horizontal lines in an image with the help of 
+    % morphological operations. Return the image without the horizontal lines.
 
-    % Tar bort stafflines
+    % Create the object which will be used to do the open morphological
+    % operation
     SE = strel('rectangle', [3, 1]);
+    
+    % Convert the image in to a logical variable
     binaryIM = logical(binaryIM);
+    
+    % Use the open morphological operation to remove stafflines. Convert
+    % the new image to an double and return it.
     open = imopen(binaryIM, SE);
-
-    % tar bort stafflines OCH notlinjer
-    % open = bwmorph(Ib, 'open');
-
     outputIM = double(open);
 end
 

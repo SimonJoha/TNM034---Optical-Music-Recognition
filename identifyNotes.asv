@@ -1,17 +1,24 @@
 function notes = identifyNotes(centroids, notePos, noteChar, notes)
+    % Identify notes based on their centroid position in relation to the
+    % location of the stafflines. Returns the notes cell array which will
+    % contain the notes on each sub-image
+    
+    % Goes through all the centroids and identify their position and what
+    % note it is
     for k = 1:length(centroids)
-
+        % Set tempNote to the first staff line position and initizilie diff
         tempNote = [notePos(1), centroids(k,2) - notePos(1), 1];
         diff = 0;
         for j = 1:length(notePos)
             diff = centroids(k,2) - notePos(j);
             if abs(diff) < tempNote(2)
-                 
                 tempNote = [notePos(j), diff, j];
-
             end
         end
-        if noteChar(tempNote(3)) ~~
+        
+        cellarg{1} = 'NO';
+        
+        if ~(strcmp(noteChar(tempNote(3), cellarg{1}))
             notes = [notes, noteChar(tempNote(3))];  
         end
        
