@@ -1,4 +1,4 @@
-function [H, theta, rho, P, lines] = houghFunction( BW, image )
+function [H, theta, rho, P, lines] = houghFunction( BW )
 
     % Hough transform, with theta going from -90 to 89 with an
     % interval of x
@@ -20,7 +20,7 @@ function [H, theta, rho, P, lines] = houghFunction( BW, image )
     
     
     % Get x amount of peaks
-    P  = houghpeaks(H, 40);
+    P  = houghpeaks(H, 20);
     
     % Now things are weird, I have no clue what this does. But it might work
     x = theta(P(:,2));

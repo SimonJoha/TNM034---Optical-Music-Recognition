@@ -10,7 +10,8 @@ function rotatedImage = rotateImage(image, peaks, theta, lines)
     for i = 1:length(lines)
         diff = diff + lines(i).point2(2) - lines(i).point1(2);
     end
-
+    diff
+    possibleAngle
     if (diff < 0)
         rotAngle = abs(possibleAngle) - 90;
     else 
@@ -19,10 +20,8 @@ function rotatedImage = rotateImage(image, peaks, theta, lines)
     
 %     rotatedIma = zeros(size(image))
     rotatedIma = imrotate(image, rotAngle, 'bicubic');
-    [heightRot, lengthRot, depthRot] = size(rotatedIma)
+    [heightRot, lengthRot, depthRot] = size(rotatedIma);
     cropLength = ceil(abs(tand(rotAngle) * lengthRot));
-    cropLength
-    heightRot
     rotatedImage = rotatedIma((cropLength:(heightRot - cropLength)),:, :);
     
     

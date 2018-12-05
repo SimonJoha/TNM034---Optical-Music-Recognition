@@ -11,10 +11,7 @@ function notes = identifyNotes(centroids, notePos, noteChar, notes)
 
             end
         end
-        
-        cellarg{1} = 'NO';
-        
-        if ~(strcmp(noteChar(tempNote(3)), cellarg{1}))
+        if noteChar(tempNote(3)) ~~
             notes = [notes, noteChar(tempNote(3))];  
         end
        
