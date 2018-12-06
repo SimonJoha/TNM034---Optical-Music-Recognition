@@ -4,7 +4,7 @@ clear
 
 % Read image
 %image = imread('Images_Training\jaaaasmin.png');
-image = imread('Images_Training\im1s.jpg');
+image = imread('Images_Training\im3s.jpg');
 image = im2double(image);
 
 % BW = makeImageBinary(image);
@@ -26,22 +26,18 @@ imshow(BW)
 template = imread('gklav.png');
 
 notes = '';
-
 for i = 1:length(begin) - 1
     
     removeGInital = removeGClef(template, subIMG{i}, sortedLinePos);
     removeG{i} = removeGInital;
     
     [notePos, noteChar] = lineToNotes(sortedLinePos(:,i));
-    [subIMG2, centroids, s] = findCentroids(removeG{i}, notePos);
+    [subIMG2, centroids] = findCentroids(removeG{i}, notePos);
     
     notes = identifyNotes(centroids, notePos, noteChar, notes);
     figure
     imshow(removeG{i});
     box = boundingBox(removeG{i}, centroids);
-    
-%     identifyTypeOfNote(box, centroids, removeG{i});
-    
     
 end
 

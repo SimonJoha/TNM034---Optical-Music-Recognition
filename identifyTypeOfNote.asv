@@ -1,0 +1,17 @@
+function [noteType] = identifyTypeOfNote(bbox, centroids, image)
+
+    for i = 1:length(bbox)-10
+        boxImg = image(floor(bbox(i,2)):floor(bbox(i,2) + bbox(i,4)), floor(bbox(i,1)):floor(bbox(i,1) + bbox(i,3))); 
+        horiProjBox = sum(boxImg, 1);
+        figure
+        imshow(boxImg)
+        [rows, columns] = size(horiProjBox);
+        figure;
+        plot(1:columns, horiProjBox, 'b-');
+        [subPks, subLocs] = findpeaks(horiProjBox);
+        % Find 5 maximum values, because there are always 5 stafflines
+        [A, ind] = maxk(subPks, 5); 
+    end
+    noteType = 0;
+end
+
