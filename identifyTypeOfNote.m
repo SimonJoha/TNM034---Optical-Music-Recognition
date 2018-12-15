@@ -1,23 +1,102 @@
-function [noteType] = identifyTypeOfNote(bbox, centroids, image)
+function [note] = identifyTypeOfNote(bbox, centroids, image, axisLength)
+    % Identify what type of note each centroid is, with the help of their
+    % position in their bounding box. Done with the help of a horizontal 
+    % projection. Return all the note types in the sub image
 
-    for i = 1:length(bbox)-10
-        boxImg = image(floor(bbox(i,2)):floor(bbox(i,2) + bbox(i,4)), floor(bbox(i,1)):floor(bbox(i,1) + bbox(i,3))); 
-        vertiProjBox = sum(boxImg, 1);
-        horiProjBox = sum(boxImg, 2);
-%         figure
-%         imshow(boxImg)
-        [rows, columns] = size(vertiProjBox);
-        figure;
-        plot(1:columns, vertiProjBox, 'b-');
-        [rows2, columns2] = size(horiProjBox);
-        hold on
-%         plot(horiProjBox, 1:rows2, 'r');
-        findpeaks(horiProjBox);
-        %[subPks, subLocs] = 
-        % Find 5 maximum values, because there are always 5 stafflines
-%         [A, ind] = maxk(subPks, 5); 
-        hold off
+    noteNr = 0;
+    for i = 1:length(bbox)
+        
+        % Create a sub image of the box. And initialization of variabels
+        boxImg = image(floor(bbox(i,2)):floor(bbox(i,2) + bbox(i,4)), ...
+                 floor(bbox(i,1)):floor(bbox(i,1) + bbox(i,3))); 
+        [boxHeight, boxLength] = size(boxImg);
+        boundingCentroid = [];
+        diff = 0;
+        % Loop over the amount of centroids, notes, in each box and find
+        % the position of each centroid in the bounding box. Calculate the
+        % difference between the centroid and the bottom of the bounding
+        % box to determine where the note heads are located.
+        for j = 1:bbox(i, 5)
+%             noteNr + j
+            boundingCentroid(j, :) = [centroids(noteNr + j, 1) - bbox(i, 1), ...
+                                      centroids(noteNr + j, 2) - bbox(i, 2)];
+            diff = diff + (boxHeight - boundingCentroid(j, 2));
+        end
+        
+        
+        % Determine if the notes are above or underneath the stem and crop
+        % out the note heads
+        if (boxHeight > axisLength * 2)
+            if (diff / bbox(i, 5) > boxHeight / 2)
+                stemImgBefore = boxImg(min(round(boxHeight*0.7), (round(axisLength + max(boundingCentroid(:, 2))))):end, :);
+            else
+                stemImgBefore = boxImg(1:max(round(boxHeight*0.3), round(min(boundingCentroid(:, 2))) - round(axisLength)), :);
+            end
+        else
+            stemImgBefore = boxImg;
+        end
+        
+        [safteyCheck, safteyCheck2] = size(stemImgBefore);
+        if (safteyCheck ~= 0 && safteyCheck2 ~= 0) 
+            for n = 1:max(1, bbox(i, 5) - 1)
+               % Split the image between centroids. If there are more than 2
+               % centroids in the stem image create an sub image for the first
+               % two notes. The next iteration the second note from the first
+               % image and the third note will be used to create the next
+               % image
+               if (n == bbox(i, 5) - 1)
+                    stemImg = stemImgBefore(:, round(boundingCentroid(n, 1)):end);
+               elseif (bbox(i, 5) == 1)
+                    stemImg = stemImgBefore;
+               else
+                    stemImg = stemImgBefore(:, round(boundingCentroid(n, 1)):min(end, round(boundingCentroid(n + 1, 1))));
+               end
+
+                % Rotate the image if there are more than one centroid in the
+                % bounding box to easier identify the note value
+                if (bbox(i, 5) > 1) 
+                    stemImg = newRotate(imcomplement(stemImg));
+                    stemImg = imcomplement(stemImg);
+                end
+                % Horizontal projection 
+                horiProjBox = sum(stemImg, 2); 
+                % Find the peaks of the horizontal projection and use these to find
+                % out what note values there are in the sub image
+                [subPks, subLocs] = findpeaks(horiProjBox); 
+                pks = 0;
+                lastpeak = 1;
+                for k = 1:length(subLocs)
+                    % Count the number of peaks in the image. A peak is consider a
+                    % peak if it contains 70% as much color as the maximum peak in
+                    % the image. An other requirement to be consider a peak is that
+                    % there has to be a certain distance between the peaks.
+                    % Otherwise the same centroid could be considered two peaks
+                    minPk = min(horiProjBox(lastpeak:round(subLocs(k))));
+                    if (minPk < 0.70 * max(subPks) & subPks(k) > 0.70 * max(subPks))
+                       pks = pks + 1;
+                       lastpeak = subLocs(k);
+                    end
+                end
+
+                % Determine what note value the bounding box image depending on
+                % how many peaks there are in the bounding box
+                for m = 1:bbox(i, 5)
+                    [rowis, colis] = size(stemImg);
+                    if (colis < axisLength * 1.5)
+                        note(noteNr + m) = 0; % 4th note
+                    elseif (pks > 1)
+                        note(noteNr + m) = 2; % 16th note
+                    elseif (pks == 1)
+                        note(noteNr + m) = 1; % 8th note
+                    else
+                        note(noteNr + m) = 0; % 4th note
+                    end
+                end
+
+            end
+        end
+        noteNr = noteNr + bbox(i,5);
     end
-    noteType = 0;
 end
-
+        
+        

@@ -1,4 +1,4 @@
-function notes = identifyNotes(centroids, notePos, noteChar, notes)
+function notes = identifyNotes(centroids, notePos, noteChar4th, noteChar8th, notes, noteType)
     % Identify notes based on their centroid position in relation to the
     % location of the stafflines. Returns the notes cell array which will
     % contain the notes on each sub-image
@@ -25,8 +25,13 @@ function notes = identifyNotes(centroids, notePos, noteChar, notes)
         % outside the note boundaries. Check if the current note character
         % is equal to the incorrect note head and then ignore it
         incorrectNoteHead{1} = 'NO';
-        if ~(strcmp(noteChar(tempNote(3)), incorrectNoteHead{1}))
-            notes = [notes, noteChar(tempNote(3))];  
+        if ~(strcmp(noteChar4th(tempNote(3)), incorrectNoteHead{1}))
+            if(noteType(k) > 0)
+                notes = [notes, noteChar8th(tempNote(3))];  
+            else
+                notes = [notes, noteChar4th(tempNote(3))];  
+            end
+                
         end
        
     end

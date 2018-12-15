@@ -12,18 +12,18 @@ function [subIMG, correctCentroids, s] = findCentroids(image, notePos)
     % Find all the centroids
     s = regionprops('table', subIMG, 'Centroid', 'MajorAxisLength', 'MinorAxisLength');
     centroids = cat(1, s.Centroid);
-    correctCentroids = zeros(size(centroids));
+    correctCentroids = [];
     % Goes through all the centroids to check if they are between the
     % boundaries of the staff lines
     for i = 1:length(s.Centroid)
         if (s.Centroid(i,2) > notePos(1) && s.Centroid(i,2) < notePos(end))
-            correctCentroids(i, :) = centroids(i, :);
+            correctCentroids = [correctCentroids; centroids(i, :)];
         end
     end
-    figure
-    imshow(subIMG);
-    hold on
-    plot(correctCentroids(:,1), correctCentroids(:,2), 'b*');
-    hold off
+%     figure
+%     imshow(subIMG);
+%     hold on
+%     plot(correctCentroids(:,1), correctCentroids(:,2), 'b*');
+%     hold off
 end
 

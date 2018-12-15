@@ -7,12 +7,12 @@ function strout = tnm034(Im)
 % strout: The resulting character array of the detected notes. 
 % The character array must follow the pre-defined format.
 %
-% Your program code…
-%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Group members: 
+% Jasmine Karlsson, Jonna Johansson, Jonathan Fransson, Simon Johasson
 
-clc
-close all
-clear
+% clc
+% close all
+% clear
 
 % Read image
 % image = imread('Images_Training\im5s.jpg');
@@ -29,10 +29,6 @@ rotatedImage = newRotate(image);
 % imshow(rotatedImage);
 
 BW = makeImageBinary(rotatedImage);
-% figure
-% imshow(BW)
-
-%%
 [horizontalProjection, begin, order] = horizontalProfile(BW);
 [subIMG, sortedLinePos] = findStaffLines(BW, begin, order);
 template = imread('gklav.png');
@@ -47,8 +43,6 @@ for i = 1:length(begin) - 1
     [notePos, noteCharArrayFourths, noteCharArrayEights] = lineToNotes(sortedLinePos(:,i));
     [subIMG2, centroids, s] = findCentroids(removeG{i}, notePos);
     
-%     figure
-%     imshow(removeG{i});
     box = boundingBox2(removeG{i}, centroids);
     axisLength = (sum(s.MinorAxisLength)/(length(s.MinorAxisLength)));
     noteType = identifyTypeOfNote(box, centroids, removeG{i}, axisLength);

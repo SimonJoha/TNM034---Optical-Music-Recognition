@@ -11,9 +11,9 @@ function [horizontalProjection, begin, order] = horizontalProfile(BW)
     maxy = max(horizontalProjection);
     miny = min(horizontalProjection);
 
-    [rows, columns] = size(BW);
-    figure;
-    plot(horizontalProjection, 1:rows, 'b-');
+%     [rows, columns] = size(BW);
+%     figure;
+%     plot(horizontalProjection, 1:rows, 'b-');
 
     
     small = 1; % Find first small value

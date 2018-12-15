@@ -8,21 +8,61 @@ function [bbox] = boundingBox(nolines, centroids)
     % Goes through all the bounding boxes and keep those that hav a note in
     % them
     bbox = [];
+    counter = 0;
+    hello = 0;
+    lastCentroid = 0
     for k = 1:length(st)
+        counter = 0;
         thisBB = st(k).BoundingBox;
-        temp = 0;
-        for i = 1:length(centroids)
-            if (centroids(i, 1) > floor(thisBB(1)) && centroids(i, 1) < ceil((thisBB(1) + thisBB(3))) ... 
-                && centroids(i, 2) > floor(thisBB(2)) && centroids(i, 2) < ceil(thisBB(2) + thisBB(4)) ...
-                && temp == 0);
-                rectangle('Position', [thisBB(1),thisBB(2),thisBB(3),thisBB(4)],...
-                'EdgeColor', 'r', 'LineWidth', 1) 
-                bbox = [bbox; thisBB(1),thisBB(2),thisBB(3),thisBB(4)];
-                temp = 1;
+        for i = 1:1:length(centroids)
+            % Only create a bounding box if there are any notes in the
+            % rectangle
+            currentCentroid = i;
+            if (currentCentroid == lastCentroid & currentCentroid < length(centroids) - 1)
+                i = i + 1;
             end
-           
+            if (centroids(i, 1) > floor(thisBB(1)) && centroids(i, 1) < ceil((thisBB(1) + thisBB(3))) ... 
+                && centroids(i, 2) > floor(thisBB(2)) && centroids(i, 2) < ceil(thisBB(2) + thisBB(4)))
+                % If the array is empty add the first box or if the
+                % x-position of the new box is different from the last
+                % element in the previous
+                if (length(bbox) == 0)
+                    disp('1')
+                    lastCentroid = i;
+                    bbox = [bbox; thisBB(1), thisBB(2), thisBB(3), thisBB(4), 1];
+                elseif (thisBB(1) < bbox(end, 1) + bbox(end, 3) & thisBB(1) > bbox(end, 1) ...
+                        & bbox(end, 1:4) ~= thisBB)
+                    bbox(end, 1:4)
+                    disp('2')
+                    topy = min(thisBB(2), bbox(end, 2));
+                    leftx = min(thisBB(1), bbox(end, 1));
+                    distx = max(thisBB(1) + thisBB(3), bbox(end, 1) + bbox(end, 3)) - leftx;
+                    disty = max(thisBB(2) + thisBB(4), bbox(end, 2) + bbox(end, 4)) - topy;
+                    lastCentroid = i;
+                    antal = bbox(end, 5) + 1
+                    bbox(end, :) = [leftx, topy, distx, disty, bbox(end, 5) + 1];
+                elseif (bbox(end, 1) ~= thisBB(1))
+                    disp('3')
+                    bbox = [bbox; thisBB(1), thisBB(2), thisBB(3), thisBB(4), 1];
+                    lastCentroid = i; 
+                elseif (bbox(end, 1:4) == thisBB)
+                    disp('4')
+                    bbox(end, 1:4)
+                    lastCentroid = i;
+                    bbox(end, 5) = bbox(end, 5) + 1;
+                elseif (bbox(end, 1) == thisBB(1) && bbox(end, 3) < thisBB(3))
+                    disp('5')
+                    lastCentroid = i;
+                    bbox(end, :) = [thisBB(1), thisBB(2), thisBB(3), thisBB(4), bbox(end, 5)];
+                else
+                    hello = 1 + hello;
+                end
+                rectangle('Position', [bbox(end, 1), bbox(end, 2), bbox(end, 3), bbox(end, 4)],...
+                          'EdgeColor', 'r', 'LineWidth', 1); 
+            end
         end
     end
+    
     
     % Return bounding boxes
 %     bbox = double(thisBB);
